@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xupito Ruleta</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #000;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            color: white;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2rem;
+        }
+        .ruleta-container {
+            position: relative;
+            width: 80vw;  /* Usa un porcentaje del ancho de la pantalla */
+            height: 80vw; /* Usa un porcentaje del alto de la pantalla */
+            max-width: 300px; /* Tamaño máximo */
+            max-height: 300px; /* Tamaño máximo */
+            margin-top: 20px;
+        }
+        .ruleta {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 5px solid #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            transition: transform 3s ease-out;
+        }
+        .flecha {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0; 
+            height: 0; 
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 20px solid white;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1.2rem; /* Botón un poco más grande para móvil */
+            border: none;
+            background-color: #28a745;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+        
+        /* Media Query para pantallas más pequeñas */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.5rem; /* Reducir tamaño del título */
+            }
+            button {
+                font-size: 1rem; /* Reducir tamaño del botón en móviles */
+                padding: 8px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Em deus un xupito de...</h1>
+    <div class="ruleta-container">
+        <div class="flecha"></div>
+        <div class="ruleta" id="ruleta">
+            <svg viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="48" fill="black" />
+                <!-- Los sectores de colores con nuevas respuestas -->
+                <path d="M50,50 L50,2 A48,48 0 0,1 92,30 Z" fill="gray"></path> <!-- Metal (Casalla) -->
+                <path d="M50,50 L92,30 A48,48 0 0,1 80,85 Z" fill="white"></path> <!-- Blanco (Arrós) -->
+                <path d="M50,50 L80,85 A48,48 0 0,1 20,85 Z" fill="pink"></path> <!-- Rosa (Fresa) -->
+                <path d="M50,50 L20,85 A48,48 0 0,1 8,30 Z" fill="brown"></path> <!-- Marrón (Jagger) -->
+                <path d="M50,50 L8,30 A48,48 0 0,1 50,2 Z" fill="url(#grad1)"></path> <!-- Multicolor (El lliures) -->
+                <!-- Gradiente multicolor para "El lliures" -->
+                <defs>
+                    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color: red; stop-opacity: 1" />
+                        <stop offset="50%" style="stop-color: yellow; stop-opacity: 1" />
+                        <stop offset="100%" style="stop-color: blue; stop-opacity: 1" />
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
+    </div>
+    <button onclick="girarRuleta()">Girar Ruleta</button>
+
+    <script>
+        const opciones = ["Casalla", "Arrós", "Fresa", "Jagger", "El lliures"];
+        let girando = false;
+
+        function girarRuleta() {
+            if (girando) return;
+            girando = true;
+            
+            // Generar un ángulo aleatorio entre 0 y 360 grados
+            let vueltas = Math.floor(Math.random() * 5) + 5; // Vueltas completas
+            let anguloFinal = vueltas * 360 + Math.floor(Math.random() * 360);
+            
+            // Calcular el índice de la respuesta según el ángulo de rotación
+            let anguloRespuesta = anguloFinal % 360;
+            let opcionIndex;
+
+            // Establecer el índice correcto basado en el ángulo final
+            if (anguloRespuesta < 72) {
+                opcionIndex = 0; // Metal (Casalla)
+            } else if (anguloRespuesta < 144) {
+                opcionIndex = 1; // Blanco (Arrós)
+            } else if (anguloRespuesta < 216) {
+                opcionIndex = 2; // Rosa (Fresa)
+            } else if (anguloRespuesta < 288) {
+                opcionIndex = 3; // Marrón (Jagger)
+            } else {
+                opcionIndex = 4; // Multicolor (El lliures)
+            }
+
+            // Aplicar la rotación de la ruleta
+            document.getElementById("ruleta").style.transform = `rotate(${anguloFinal}deg)`;
+            
+            setTimeout(() => {
+                alert("Xupito de: " + opciones[opcionIndex]);
+                girando = false;
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
